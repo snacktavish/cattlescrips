@@ -8,6 +8,8 @@ from CattleDictionaries import cownames, snpnames, ibmclocdict, gen
 
 #This doesn't test to see if indiviuals are in genos yet...
 def add_final_reports(genos,fis,cutoff=0.7):
+    ""Witre a reasonable docstring!
+    ""
     new_genos=genos.copy()
     assert type(fis) is list
     skips=set()

@@ -18,18 +18,22 @@ def phase_inp(geno,mark_dict,filtered_snps,outstr):
       for chrm in mark_dict:
         print("Chromosome %s" %chrm)
         oufi=open("%s%s.inp"%(outstr,chrm),'w')
-        oufi.write(str(len(geno))+"\n")
-        oufi.write(str(len(mark_dict[chrm]))+"\n"+"P ")
+        ii=0
+        ids=[]
         for mark in mark_dict[chrm]:
-             oufi.write(str(mark[1])+' ')
-        oufi.write('\n')
-        oufi.write("S" * len(mark_dict[chrm])+"\n")#WTF ARE THESE SSSSs for?
+              if mark[0] in filtered_snps:
+                     ids.append(str(mark[1]))
+                     ii+=1
+        oufi.write(str(len(geno))+"\n")
+        oufi.write(str(ii)+"\n"+"P ")
+        oufi.write(' '.join(ids)+'\n')
+        oufi.write("S" * ii +"\n")#WTF ARE THESE SSSSs for?
         for ind in geno:
                 oufi.write("# id %s"%ind+"\n")
                 hap1=[]
                 hap2=[]
                 for mark in mark_dict[chrm]:
-                  if mark in filtered_snps:
+                  if mark[0] in filtered_snps:
                     try:
                       genot=geno[ind][mark[0]]
                     except KeyError:
@@ -49,7 +53,7 @@ def phase_inp(geno,mark_dict,filtered_snps,outstr):
                     if genot not in ['1','2','3','?','10']:
                        hap1.append('?')
                        hap2.append('?')
-                assert(len(hap1)==len(hap2)==len(mark_dict[chrm]))
+                assert(len(hap1)==len(hap2))
                 oufi.write("".join(hap1)+'\n')
                 oufi.write("".join(hap2)+'\n')
         oufi.close()
